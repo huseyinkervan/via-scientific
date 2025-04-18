@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-client
+  labels:
+    app: test-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-client
+  template:
+    metadata:
+      labels:
+        app: test-client
+    spec:
+      containers:
+      - name: busybox
+        image: busybox:1.35.0
+        command: ["sh", "-c", "while true; do sleep 3600; done"]
+        # busybox içinde wget mevcut; servislere erişim için kullanabilirsiniz:
+        # e.g. wget -qO- http://test-app:80

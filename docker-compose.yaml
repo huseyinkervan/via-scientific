@@ -1,0 +1,28 @@
+services:
+  docker-dind:
+    image: docker:20.10.7-dind
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    networks:
+      - minikube-net
+  minikube:
+    build:
+      context: .
+    image: minikube-dind-setup
+    privileged: true
+    environment:
+      DOCKER_HOST: "tcp://docker-dind:2375"
+      ARCH: ${ARCH}
+      MOUNT_DIR: ${MOUNT_DIR}
+    volumes:
+      - ${MOUNT_DIR}:/manifests
+    env_file:
+      - .env
+    networks:
+      - minikube-net
+    depends_on:
+      - docker-dind
+networks:
+  minikube-net:
+    driver: bridge
