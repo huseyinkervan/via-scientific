@@ -18,17 +18,14 @@ minikube start \
   --memory=16384mb \
   --force
 
-
-
-
-
 echo "Applying kustomize manifests with server-side apply, errors will be ignored..."
 set +e
-kustomize build /manifests/shinyproxy/shinyproxy-operator/docs/deployment/overlays/1-namespaced | kubectl apply -f - --server-side
+git clone https://github.com/openanalytics/shinyproxy-operator
+kustomize build shinyproxy-operator/docs/deployment/overlays/1-namespaced | kubectl apply -f - --server-side
 kustomize build /manifests/shinyproxy/ | kubectl apply -f - --server-side
 sleep 2
 ## rety edilmesi documanda tavsiye edilmiş https://github.com/openanalytics/shinyproxy-operator/tree/master/docs/deployment
-kustomize build /manifests/shinyproxy/shinyproxy-operator/docs/deployment/overlays/1-namespaced | kubectl apply -f - --server-side
+kustomize build shinyproxy-operator/docs/deployment/overlays/1-namespaced | kubectl apply -f - --server-side
 set -e
 
 echo "Kustomize apply step finished."
